@@ -1,4 +1,4 @@
-### WebSocket first app (2024)
+### WebSocket chat app (2024)
 
 Course: Advanced Web Techniques
 
