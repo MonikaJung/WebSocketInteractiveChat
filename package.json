@@ -1,7 +1,7 @@
 {
-  "name": "ztw-websocket",
+  "name": "ztw-first-socket-chat",
   "version": "1.0.0",
-  "description": "ZTW task 8 - WebSocket",
+  "description": "ZTW task 8 - WebSocket, part 2 - interactive chat",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Test...\"",
@@ -16,7 +16,5 @@
   ],
   "author": "Monika Jung 260448",
   "license": "ISC",
-  "dependencies": {
-    "ws": "^8.17.0"
-  }
+  "dependencies": {}
 }
