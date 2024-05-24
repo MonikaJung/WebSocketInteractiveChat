@@ -1,0 +1,18 @@
+{
+  "name": "ztw-websocket",
+  "version": "1.0.0",
+  "description": "ZTW task 8 - WebSocket",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Test...\""
+  },
+  "keywords": [
+    "ztw",
+    "websocket",
+    "8",
+    "list",
+    "task"
+  ],
+  "author": "Monika Jung 260448",
+  "license": "ISC"
+}
