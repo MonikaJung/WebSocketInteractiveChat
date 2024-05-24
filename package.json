@@ -1,0 +1,23 @@
+{
+    "name": "ztw-websocket-chat",
+    "version": "1.0.0",
+    "description": "ZTW task 8 - WebSocket Chat",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Test...\"",
+        "start": "node index.js"
+    },
+    "keywords": [
+        "ztw",
+        "websocket",
+        "chat",
+        "8",
+        "list",
+        "task"
+    ],
+    "author": "Monika Jung 260448",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.19.2"
+    }
+}
