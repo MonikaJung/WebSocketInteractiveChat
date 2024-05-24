@@ -4,7 +4,8 @@
   "description": "ZTW task 8 - WebSocket",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Test...\""
+    "test": "echo \"Test...\"",
+    "start": "node index.js"
   },
   "keywords": [
     "ztw",
@@ -14,5 +15,8 @@
     "task"
   ],
   "author": "Monika Jung 260448",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.17.0"
+  }
 }
