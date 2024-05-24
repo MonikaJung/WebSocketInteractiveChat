@@ -10,7 +10,7 @@
       <h2>Please type your name and select chat room</h2>
       <form id="login-form">
         <input
-          id="usename"
+          id="usename-input"
           autocomplete="off"
           placeholder="Your username..."
           value="Guest"
@@ -42,12 +42,12 @@
       var input = document.getElementById("input");
       var roomButtons = document.querySelectorAll("#room-buttons .room-button");
       var selectedRoom = "room1"; // Default room
-      var username = document.getElementById("usename").value || "Guest"; // Default username
+      var username = document.getElementById("usename-input").value || "Guest"; // Default username
 
       loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        username = document.getElementById("usename").value;
+        username = document.getElementById("usename-input").value;
         document.getElementById("login-page").style.display = "none";
         document.getElementById("chat-page").style.display = "block";
 
@@ -68,7 +68,16 @@
 
       socket.on("chat message", function (data) {
         var item = document.createElement("li");
-        item.textContent = data.user + ": " + data.text;
+        item.textContent =
+          data.user === username
+            ? "Ja: " + data.text
+            : data.user + ": " + data.text;
+        if (data.user === "[INFO]") {
+          item.style.fontStyle = "italic";
+        } else {
+          item.style.fontWeight = data.user === username ? "bold" : "normal";
+          item.style.textAlign = data.user === username ? "right" : "left";
+        }
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
