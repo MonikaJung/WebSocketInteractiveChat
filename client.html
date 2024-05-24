@@ -2,6 +2,12 @@
   <script>
     // getting the websocket object
     let ws = new WebSocket("ws://localhost:8000");
+    //logging the websocket properties
+    console.log(ws);
+    //sending a message when connection opens
+    ws.onopen = (event) => ws.send("Hello WebSocket server ");
+    //logging the message from server
+    ws.onmessage = (message) => console.log(message);
   </script>
   <body>
     <h1>This is a client page</h1>

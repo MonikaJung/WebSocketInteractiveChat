@@ -17,3 +17,15 @@ wss.on("headers", (headers, req) => {
 console.log("Listening on http://localhost:8000 ...");
 // listen to port 8000
 server.listen(8000);
+
+// ------- Event: 'connection' ---------
+wss.on("connection", (ws, req) => {
+  ws.send("Welcome, your connection is ready");
+  //receive the message from client on Event: 'message'
+  ws.on("message", (msg, isBinary) => {
+    console.log("Received message from client:");
+    const message = isBinary ? msg : msg.toString();
+    console.log(message);
+  });
+});
+
