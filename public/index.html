@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="login-page" class="visable">
+      <h1>Welcome new chat user!</h1>
+      <h2>Please type your name and select chat room</h2>
+      <form id="login-form">
+        <input
+          id="usename"
+          autocomplete="off"
+          placeholder="Your username..."
+          value="Guest"
+        />
+        <div id="room-buttons">
+          <div class="room-button selected" data-value="Room 1">Room 1</div>
+          <div class="room-button" data-value="Room 2">Room 2</div>
+          <div class="room-button" data-value="Room 3">Room 3</div>
+        </div>
+        <button id="login-button" type="submit">Start chatting!</button>
+      </form>
+    </div>
+
+    <div id="chat-page" class="hidden">
+      <ul id="messages"></ul>
+      <form id="message-form" action="">
+        <input id="input" autocomplete="off" />
+        <button>Send</button>
+      </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+
+      var loginForm = document.getElementById("login-form");
+      var messages = document.getElementById("messages");
+      var messageForm = document.getElementById("message-form");
+      var input = document.getElementById("input");
+      var roomButtons = document.querySelectorAll("#room-buttons .room-button");
+      var selectedRoom = "room1"; // Default room
+      var username = document.getElementById("usename").value || "Guest"; // Default username
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        username = document.getElementById("usename").value;
+        document.getElementById("login-page").style.display = "none";
+        document.getElementById("chat-page").style.display = "block";
+
+        socket.emit("join room", { username: username, room: selectedRoom });
+      });
+
+      messageForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit("chat message", {
+            text: input.value,
+            user: username,
+            room: selectedRoom,
+          });
+          input.value = "";
+        }
+      });
+
+      socket.on("chat message", function (data) {
+        var item = document.createElement("li");
+        item.textContent = data.user + ": " + data.text;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      roomButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          roomButtons.forEach((btn) => btn.classList.remove("selected"));
+          button.classList.add("selected");
+          selectedRoom = button.getAttribute("data-value");
+        });
+      });
+    </script>
+  </body>
+</html>
