@@ -45,18 +45,36 @@
       var messageForm = document.getElementById("message-form");
       var input = document.getElementById("input");
       var roomButtons = document.querySelectorAll("#room-buttons .room-button");
-      var selectedRoom = "room1";
-      var username = document.getElementById("usename-input").value;
+      var selectedRoom = "Room 1";
+      var username = "Guest";
+
+      function getRandomNumber() {
+        return Math.floor(Math.random() * 9000) + 1000;
+      }
+
+      function getCurrentDateAndTime() {
+        const dt = new Date();
+        const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
+
+        return `${padL(dt.getMonth() + 1)}/${padL(
+          dt.getDate()
+        )}/${dt.getFullYear()} ${padL(dt.getHours())}:${padL(
+          dt.getMinutes()
+        )}:${padL(dt.getSeconds())}`;
+      }
 
       loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
         username = document.getElementById("usename-input").value;
+        if (username == "Guest" || username == "") {
+          username += getRandomNumber();
+        }
         document.getElementById("login-page").style.display = "none";
         document.getElementById("chat-page").style.display = "block";
 
-        document.getElementById("chat-tittle").textContent = "Chat Room: " + selectedRoom;
-        document.getElementById("user-nick").textContent = "Username: " + username;
+        document.getElementById("chat-tittle").textContent = selectedRoom;
+        document.getElementById("user-nick").textContent = "User: " + username;
 
         socket.emit("join room", { username: username, room: selectedRoom });
       });
@@ -75,10 +93,10 @@
 
       socket.on("chat message", function (data) {
         var item = document.createElement("li");
-        item.textContent =
-          data.user === username
-            ? "Ja: " + data.text
-            : data.user + ": " + data.text;
+        var itemText = data.user === username ? "Ja" : data.user;
+        var currentDatetime = getCurrentDateAndTime();
+        item.textContent = itemText + " (" + currentDatetime + "):" + data.text;
+          
         if (data.user === "[INFO]") {
           item.style.fontStyle = "italic";
         } else {
