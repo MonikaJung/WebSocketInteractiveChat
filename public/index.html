@@ -25,6 +25,10 @@
     </div>
 
     <div id="chat-page" class="hidden">
+      <div id="chat-header">
+        <h1 id="chat-tittle"></h1>
+        <h2 id="user-nick"></h2>
+      </div>
       <ul id="messages"></ul>
       <form id="message-form" action="">
         <input id="input" autocomplete="off" />
@@ -41,8 +45,8 @@
       var messageForm = document.getElementById("message-form");
       var input = document.getElementById("input");
       var roomButtons = document.querySelectorAll("#room-buttons .room-button");
-      var selectedRoom = "room1"; // Default room
-      var username = document.getElementById("usename-input").value || "Guest"; // Default username
+      var selectedRoom = "room1";
+      var username = document.getElementById("usename-input").value;
 
       loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -50,6 +54,9 @@
         username = document.getElementById("usename-input").value;
         document.getElementById("login-page").style.display = "none";
         document.getElementById("chat-page").style.display = "block";
+
+        document.getElementById("chat-tittle").textContent = "Chat Room: " + selectedRoom;
+        document.getElementById("user-nick").textContent = "Username: " + username;
 
         socket.emit("join room", { username: username, room: selectedRoom });
       });
