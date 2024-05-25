@@ -139,3 +139,23 @@ input {
 #login-button:active {
   background-color: #282828;
 }
+#chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f2f2f2; /* Ensure this color contrasts with the background */
+  border-bottom: 2px solid #ccc;
+}
+#chat-tittle, #user-nick {
+  flex-grow: 1;
+  margin: 0; /* Remove default margins */
+}
+#chat-tittle {
+  text-align: center;
+}
+#user-nick {
+  padding-right: 20px;
+  text-align: right;
+  white-space: nowrap;
+}
