@@ -149,11 +149,13 @@ input {
 .msg {
   border-radius: 10px;
   margin: 5px;
+  border: solid 1px #005d82;
 }
 .msg.msg-other {
-  background-color: #dff2ff;
+  background-color: #a4d7ec;
   margin-right: 20%;
   color: #003459;
+  width: fit-content;
 }
 .msg.msg-mine {
   background-color: #00405a;
