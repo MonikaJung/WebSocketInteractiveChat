@@ -7,20 +7,24 @@
   <body>
     <div id="login-page" class="visable">
       <h1>Welcome new chat user!</h1>
-      <h2>Please type your name and select chat room</h2>
       <form id="login-form">
         <input
           id="usename-input"
           autocomplete="off"
-          placeholder="Your username..."
-          value="Guest"
+          placeholder="Type here your username..."
+          tabindex="0"
         />
+        <h3>Select your chat room:</h3>
         <div id="room-buttons">
-          <div class="room-button selected" data-value="Room 1">Room 1</div>
-          <div class="room-button" data-value="Room 2">Room 2</div>
-          <div class="room-button" data-value="Room 3">Room 3</div>
+          <div class="room-button selected" data-value="Room 1" tabindex="1">
+            Room 1
+          </div>
+          <div class="room-button" data-value="Room 2" tabindex="2">Room 2</div>
+          <div class="room-button" data-value="Room 3" tabindex="3">Room 3</div>
         </div>
-        <button id="login-button" type="submit">Start chatting!</button>
+        <button id="login-button" type="submit" tabindex="4">
+          Start chatting!
+        </button>
       </form>
     </div>
 
@@ -31,8 +35,8 @@
       </div>
       <ul id="messages"></ul>
       <form id="message-form" action="">
-        <input id="input" autocomplete="off" />
-        <button>Send</button>
+        <input id="message-input" autocomplete="off" tabindex="0" />
+        <button tabindex="1">Send</button>
       </form>
     </div>
 
@@ -43,7 +47,7 @@
       var loginForm = document.getElementById("login-form");
       var messages = document.getElementById("messages");
       var messageForm = document.getElementById("message-form");
-      var input = document.getElementById("input");
+      var messageInput = document.getElementById("message-input");
       var roomButtons = document.querySelectorAll("#room-buttons .room-button");
       var selectedRoom = "Room 1";
       var username = "Guest";
@@ -68,7 +72,7 @@
 
         username = document.getElementById("usename-input").value;
         if (username == "Guest" || username == "") {
-          username += getRandomNumber();
+          username = "Guest" + getRandomNumber();
         }
         document.getElementById("login-page").style.display = "none";
         document.getElementById("chat-page").style.display = "block";
@@ -81,28 +85,43 @@
 
       messageForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        if (input.value) {
+        if (messageInput.value) {
           socket.emit("chat message", {
-            text: input.value,
+            text: messageInput.value,
             user: username,
             room: selectedRoom,
           });
-          input.value = "";
+          messageInput.value = "";
         }
       });
 
       socket.on("chat message", function (data) {
         var item = document.createElement("li");
-        var itemText = data.user === username ? "Ja" : data.user;
-        var currentDatetime = getCurrentDateAndTime();
-        item.textContent = itemText + " (" + currentDatetime + "):" + data.text;
-          
-        if (data.user === "[INFO]") {
-          item.style.fontStyle = "italic";
+        var header = document.createElement("div");
+        var userP = document.createElement("div");
+        userP.textContent = data.user === username ? "Ja" : data.user;
+        var dateP = document.createElement("div");
+        dateP.textContent = getCurrentDateAndTime();
+        var messageP = document.createElement("p");
+        messageP.textContent = data.text;
+
+        if (data.user === "[INFO]") item.className = "msg-info";
+        else item.className = "msg";
+        if (data.user === username) {
+          item.classList.add("msg-mine");
         } else {
-          item.style.fontWeight = data.user === username ? "bold" : "normal";
-          item.style.textAlign = data.user === username ? "right" : "left";
+          item.classList.add("msg-other");
         }
+        item.appendChild(header);
+        header.appendChild(userP);
+        header.appendChild(dateP);
+        item.appendChild(messageP);
+
+        header.classList.add("header");
+        userP.classList.add("user");
+        dateP.classList.add("date");
+        messageP.classList.add("content");
+
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
       });
