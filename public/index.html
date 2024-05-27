@@ -84,6 +84,10 @@
         socket.emit("join room", { username: username, room: selectedRoom });
       });
 
+      document.addEventListener("beforeunload", function (e) {
+        socket.emit("disconnect", { username: username, room: selectedRoom });
+      });
+
       messageForm.addEventListener("submit", function (e) {
         e.preventDefault();
         if (messageInput.value) {
@@ -121,7 +125,7 @@
         dateP.textContent = getCurrentDateAndTime();
         var messageP = document.createElement("p");
         messageP.textContent = data.text;
-        
+
         item.className = "msg";
 
         if (data.user === username) {
