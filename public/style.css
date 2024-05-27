@@ -149,7 +149,6 @@ input {
   margin: 0;
   padding: 0;
   padding-top: 60px;
-  margin-right: 10px;
 }
 .msg-info {
   text-align: center;
@@ -160,6 +159,8 @@ input {
   border-radius: 10px;
   margin: 5px;
   border: solid 1px #005d82;
+  display: flex;
+  flex-direction: column;
 }
 .msg.msg-other {
   background-color: #a4d7ec;
@@ -172,6 +173,7 @@ input {
   margin-left: 20%;
   color: #dff2ff;
   width: 80%;
+  height: auto;
 }
 .msg .header {
   display: flex;
@@ -195,9 +197,12 @@ input {
   font-size: 1.2rem;
   padding: 10px;
   padding-bottom: 5px;
+  overflow-wrap: break-word;
 }
-.msg img {
-  width: 100%;
+.msg .chat-img {
+  max-width: 100%;
+  display: block;
+  margin: 5px 0;
 }
 
 #message-form {
