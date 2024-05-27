@@ -177,16 +177,15 @@
         contentP.classList.add("content");
 
         if (data.text) {
-          const textP = document.createElement("p");
-          textP.textContent = data.text;
-          contentP.appendChild(textP);
+          contentP.textContent = data.text;
         }
 
         if (data.image) {
           const img = document.createElement("img");
           img.src = data.image;
-          img.style.maxWidth = "200px"; // Ogranicz rozmiar obrazu
+          img.style.maxHeight = "500px";
           contentP.appendChild(img);
+          img.className = "chat-img";
         }
 
         header.appendChild(userP);
@@ -196,7 +195,13 @@
 
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
+        if(data.image) scrollDelay();
       });
+
+      async function scrollDelay() {
+        await new Promise((resolve) => setTimeout(resolve, 200)); // Opóźnienie o 200 milisekund
+        window.scrollTo(0, document.body.scrollHeight);
+      }
 
       roomButtons.forEach((button) => {
         button.addEventListener("click", function () {
