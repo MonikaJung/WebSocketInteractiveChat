@@ -74,6 +74,7 @@
       );
       var selectedRoom = "Room 1";
       var username = "Guest";
+      let typingTimeout;
 
       function getRandomNumber() {
         return Math.floor(Math.random() * 9000) + 1000;
@@ -139,6 +140,8 @@
             room: selectedRoom,
           });
           messageInput.value = "";
+          clearTimeout(typingTimeout);
+          sendTypingStatus(false);
         }
       });
 
@@ -158,20 +161,26 @@
         showInfoMessage(data.text);
       });
 
-      messageInput.addEventListener("input", function () {
+      function sendTypingStatus(start) {
         socket.emit("chat typing", {
           user: username,
           room: selectedRoom,
-          start: true,
+          start: start,
         });
+      }
+
+      messageInput.addEventListener("input", function () {
+        clearTimeout(typingTimeout);
+        sendTypingStatus(true);
+
+        typingTimeout = setTimeout(() => {
+          sendTypingStatus(false);
+        }, 500);
       });
 
       messageInput.addEventListener("blur", function () {
-        socket.emit("chat typing", {
-          user: username,
-          room: selectedRoom,
-          start: false,
-        });
+        clearTimeout(typingTimeout);
+        sendTypingStatus(false);
       });
 
       socket.on("chat typing", function (data) {
