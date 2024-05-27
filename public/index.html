@@ -35,6 +35,9 @@
         <h2 class="header-cell" id="user-nick">Username</h2>
       </div>
       <ul id="messages"></ul>
+      <div id="typing-info-area" class="hidden">
+        <div class="msg-info" id="typing-info"></div>
+      </div>
       <form id="message-form" action="">
         <input
           type="text"
@@ -61,11 +64,14 @@
     <script>
       var socket = io();
 
-      var loginForm = document.getElementById("login-form");
-      var messages = document.getElementById("messages");
-      var messageForm = document.getElementById("message-form");
-      var messageInput = document.getElementById("message-input");
-      var roomButtons = document.querySelectorAll("#room-buttons .room-button");
+      const loginForm = document.getElementById("login-form");
+      const messages = document.getElementById("messages");
+      const messageForm = document.getElementById("message-form");
+      const messageInput = document.getElementById("message-input");
+      const typingInfo = document.getElementById("typing-info");
+      const roomButtons = document.querySelectorAll(
+        "#room-buttons .room-button"
+      );
       var selectedRoom = "Room 1";
       var username = "Guest";
 
@@ -85,14 +91,10 @@
       }
 
       function handleFileSelect(event) {
-        console.log("File input changed."); // Sprawdź, czy funkcja jest wywoływana
         const file = event.target.files[0];
-        console.log("Selected file:", file); // Wyświetl informacje o pliku
-
         if (file && file.type.startsWith("image/")) {
           const reader = new FileReader();
           reader.onload = function (loadEvent) {
-            console.log("File loaded."); // Potwierdź, że plik został załadowany
             socket.emit("chat message", {
               image: loadEvent.target.result,
               user: username,
@@ -156,6 +158,31 @@
         showInfoMessage(data.text);
       });
 
+      messageInput.addEventListener("input", function () {
+        socket.emit("chat typing", {
+          user: username,
+          room: selectedRoom,
+          start: true,
+        });
+      });
+
+      messageInput.addEventListener("blur", function () {
+        socket.emit("chat typing", {
+          user: username,
+          room: selectedRoom,
+          start: false,
+        });
+      });
+
+      socket.on("chat typing", function (data) {
+        const typingInfoArea = document.getElementById("typing-info-area");
+        if (data.text) {
+          typingInfoArea.className = "visable";
+          typingInfo.textContent = data.text;
+        } else typingInfoArea.className = "hidden";
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
       socket.on("chat message", function (data) {
         const item = document.createElement("li");
         item.className = "msg";
@@ -195,7 +222,7 @@
 
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
-        if(data.image) scrollDelay();
+        if (data.image) scrollDelay();
       });
 
       async function scrollDelay() {

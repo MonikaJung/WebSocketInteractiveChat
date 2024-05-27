@@ -29,11 +29,17 @@ io.on("connection", (socket) => {
     io.to(room).emit("chat info", { text: text });
   });
 
+  socket.on("chat typing", ({ user, room, start }) => {
+    if (start)
+      io.to(room).emit("chat typing", { text: `${user} is typing...` });
+    else io.to(room).emit("chat typing", {});
+  });
+
   socket.on("chat message", ({ text, user, room, image }) => {
     const message = { user, room };
     if (text) message.text = text;
     if (image) message.image = image;
-  
+
     io.to(room).emit("chat message", message);
   });
 
