@@ -31,7 +31,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat typing", ({ user, room, start }) => {
     if (start)
-      io.to(room).emit("chat typing", { text: `${user} is typing...` });
+      io.to(room).emit("chat typing", { user: user, text: `${user} is typing...` });
     else io.to(room).emit("chat typing", {});
   });
 

@@ -185,7 +185,7 @@
 
       socket.on("chat typing", function (data) {
         const typingInfoArea = document.getElementById("typing-info-area");
-        if (data.text) {
+        if (data.text && data.user != username) {
           typingInfoArea.className = "visable";
           typingInfo.textContent = data.text;
         } else typingInfoArea.className = "hidden";

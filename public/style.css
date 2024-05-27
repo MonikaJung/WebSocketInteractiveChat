@@ -169,6 +169,7 @@ input {
   margin-right: 20%;
   color: #003459;
   width: fit-content;
+  max-width: 80%;
 }
 .msg.msg-mine {
   background-color: #00405a;
