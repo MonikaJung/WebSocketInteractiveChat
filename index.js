@@ -15,10 +15,16 @@ io.on("connection", (socket) => {
   console.log("new user connected");
 
   socket.on("join room", ({ username, room }) => {
+    socket.username = username;
+    socket.room = room;
     socket.join(room);
     console.log(`${username} joined ${room}`);
-    socket.to(room).emit('chat message', { user: '[INFO]', text: `${username} has joined the room` });
-    socket.emit('room joined', { message: `You joined ${room}` });
+    socket.to(room).emit('chat info', { text: `[INFO]: ${username} has joined the room` });
+    socket.emit('room joined', { text: `You joined ${room}` });
+  });
+
+  socket.on("chat info", ({ text, room }) => {
+    io.to(room).emit("chat info", { text: text });
   });
 
   socket.on("chat message", ({ text, user, room }) => {
@@ -26,7 +32,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    const username = socket.username || "";
+    const room = socket.room || "";
+
+    if (socket.room) {
+      io.to(socket.room).emit("chat info", {text: `${username} left the room`});
+      console.log(`--> ${username} left ${room}.`);
+    }
+    else {
+      console.log("new user disconnected");
+    }
   });
 });
 

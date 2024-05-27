@@ -51,6 +51,7 @@
       var roomButtons = document.querySelectorAll("#room-buttons .room-button");
       var selectedRoom = "Room 1";
       var username = "Guest";
+      var isLogged = false;
 
       function getRandomNumber() {
         return Math.floor(Math.random() * 9000) + 1000;
@@ -95,6 +96,22 @@
         }
       });
 
+      socket.on("chat info", function (data) {
+        var item = document.createElement("li");
+        item.textContent = data.text;
+        item.className = "msg-info";
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
+      socket.on("room joined", function (data) {
+        var item = document.createElement("li");
+        item.textContent = data.text;
+        item.className = "msg-info";
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+
       socket.on("chat message", function (data) {
         var item = document.createElement("li");
         var header = document.createElement("div");
@@ -104,9 +121,9 @@
         dateP.textContent = getCurrentDateAndTime();
         var messageP = document.createElement("p");
         messageP.textContent = data.text;
+        
+        item.className = "msg";
 
-        if (data.user === "[INFO]") item.className = "msg-info";
-        else item.className = "msg";
         if (data.user === username) {
           item.classList.add("msg-mine");
         } else {
