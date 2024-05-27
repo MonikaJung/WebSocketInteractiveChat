@@ -17,7 +17,7 @@ body {
 #login-page {
   text-align: center;
   background: #00405a;
-  margin: 1.5rem 15% 0 15%;
+  margin: 1.5rem 10% 0 10%;
   border-radius: 20px;
   padding: 30px 20px;
 }
@@ -49,6 +49,7 @@ input {
   border-radius: 2rem;
   margin: 1.2rem 0 2rem 0;
   min-width: 45%;
+  max-width: 80%;
   width: auto;
   text-align: center;
   background-color: #ffffff;
@@ -73,8 +74,9 @@ input {
   font-size: 1.4rem;
   font-weight: bold;
   padding: 30px;
-  margin: 0 0.5rem;
-  width: 20%;
+  margin: 0.5rem 0.5rem;
+  width: auto;
+  max-width: 20%;
 }
 #room-buttons .room-button:hover {
   background-color: rgb(142, 201, 240);
@@ -167,6 +169,7 @@ input {
   margin-right: 20%;
   color: #003459;
   width: fit-content;
+  max-width: 80%;
 }
 .msg.msg-mine {
   background-color: #00405a;
