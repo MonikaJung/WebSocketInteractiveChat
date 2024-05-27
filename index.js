@@ -5,7 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "public/index.html");
@@ -19,16 +19,22 @@ io.on("connection", (socket) => {
     socket.room = room;
     socket.join(room);
     console.log(`${username} joined ${room}`);
-    socket.to(room).emit('chat info', { text: `[INFO]: ${username} has joined the room` });
-    socket.emit('room joined', { text: `You joined ${room}` });
+    socket
+      .to(room)
+      .emit("chat info", { text: `[INFO]: ${username} has joined the room` });
+    socket.emit("room joined", { text: `You joined ${room}` });
   });
 
   socket.on("chat info", ({ text, room }) => {
     io.to(room).emit("chat info", { text: text });
   });
 
-  socket.on("chat message", ({ text, user, room }) => {
-    io.to(room).emit("chat message", { user: user, text: text });
+  socket.on("chat message", ({ text, user, room, image }) => {
+    const message = { user, room };
+    if (text) message.text = text;
+    if (image) message.image = image;
+  
+    io.to(room).emit("chat message", message);
   });
 
   socket.on("disconnect", () => {
@@ -36,10 +42,11 @@ io.on("connection", (socket) => {
     const room = socket.room || "";
 
     if (socket.room) {
-      io.to(socket.room).emit("chat info", {text: `${username} left the room`});
+      io.to(socket.room).emit("chat info", {
+        text: `${username} left the room`,
+      });
       console.log(`--> ${username} left ${room}.`);
-    }
-    else {
+    } else {
       console.log("new user disconnected");
     }
   });

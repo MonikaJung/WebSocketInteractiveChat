@@ -36,7 +36,23 @@
       </div>
       <ul id="messages"></ul>
       <form id="message-form" action="">
-        <input id="message-input" autocomplete="off" tabindex="0" />
+        <input
+          type="text"
+          id="message-input"
+          autocomplete="off"
+          tabindex="0"
+          placeholder="Type your message..."
+        />
+        <input
+          type="file"
+          id="image-input"
+          accept="image/*"
+          style="display: none"
+          onchange="handleFileSelect(event)"
+        />
+        <label for="image-input" class="image-upload-label">
+          <img id="upload-icon" src="upload-icon.png" alt="Upload Image" />
+        </label>
         <button tabindex="1">Send</button>
       </form>
     </div>
@@ -68,6 +84,29 @@
         )}:${padL(dt.getSeconds())}`;
       }
 
+      function handleFileSelect(event) {
+        console.log("File input changed."); // Sprawdź, czy funkcja jest wywoływana
+        const file = event.target.files[0];
+        console.log("Selected file:", file); // Wyświetl informacje o pliku
+
+        if (file && file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = function (loadEvent) {
+            console.log("File loaded."); // Potwierdź, że plik został załadowany
+            socket.emit("chat message", {
+              image: loadEvent.target.result,
+              user: username,
+              room: selectedRoom,
+            });
+          };
+          reader.readAsDataURL(file);
+        } else {
+          console.log(
+            "No image file selected or file format is not supported."
+          );
+        }
+      }
+
       loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
@@ -90,9 +129,10 @@
 
       messageForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        if (messageInput.value) {
+        const text = messageInput.value.trim();
+        if (text) {
           socket.emit("chat message", {
-            text: messageInput.value,
+            text: text,
             user: username,
             room: selectedRoom,
           });
@@ -104,7 +144,7 @@
         showInfoMessage(data.text);
       });
 
-      function showInfoMessage(text){
+      function showInfoMessage(text) {
         var item = document.createElement("li");
         item.textContent = text;
         item.className = "msg-info";
@@ -117,31 +157,42 @@
       });
 
       socket.on("chat message", function (data) {
-        var item = document.createElement("li");
-        var header = document.createElement("div");
-        var userP = document.createElement("div");
-        userP.textContent = data.user === username ? "Ja" : data.user;
-        var dateP = document.createElement("div");
-        dateP.textContent = getCurrentDateAndTime();
-        var messageP = document.createElement("p");
-        messageP.textContent = data.text;
-
+        const item = document.createElement("li");
         item.className = "msg";
+        data.user === username
+          ? item.classList.add("msg-mine")
+          : item.classList.add("msg-other");
+        const header = document.createElement("div");
+        header.classList.add("header");
 
-        if (data.user === username) {
-          item.classList.add("msg-mine");
-        } else {
-          item.classList.add("msg-other");
+        const userP = document.createElement("div");
+        userP.textContent = data.user === username ? "Ja" : data.user;
+        userP.classList.add("user");
+
+        const dateP = document.createElement("div");
+        dateP.textContent = getCurrentDateAndTime();
+        dateP.classList.add("date");
+
+        const contentP = document.createElement("div");
+        contentP.classList.add("content");
+
+        if (data.text) {
+          const textP = document.createElement("p");
+          textP.textContent = data.text;
+          contentP.appendChild(textP);
         }
-        item.appendChild(header);
+
+        if (data.image) {
+          const img = document.createElement("img");
+          img.src = data.image;
+          img.style.maxWidth = "200px"; // Ogranicz rozmiar obrazu
+          contentP.appendChild(img);
+        }
+
         header.appendChild(userP);
         header.appendChild(dateP);
-        item.appendChild(messageP);
-
-        header.classList.add("header");
-        userP.classList.add("user");
-        dateP.classList.add("date");
-        messageP.classList.add("content");
+        item.appendChild(header);
+        item.appendChild(contentP);
 
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);

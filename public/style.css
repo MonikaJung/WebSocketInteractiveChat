@@ -149,6 +149,7 @@ input {
   margin: 0;
   padding: 0;
   padding-top: 60px;
+  margin-right: 10px;
 }
 .msg-info {
   text-align: center;
@@ -195,6 +196,9 @@ input {
   padding: 10px;
   padding-bottom: 5px;
 }
+.msg img {
+  width: 100%;
+}
 
 #message-form {
   background: #6eacc4;
@@ -233,4 +237,13 @@ input {
 #message-form > button:hover,
 button:focus {
   background: #004d6b;
+}
+#upload-icon {
+  width: 30px;
+  padding: 5px;
+  cursor: pointer;
+}
+#upload-icon:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.30);
 }
