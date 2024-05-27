@@ -17,8 +17,7 @@ body {
 #login-page {
   text-align: center;
   background: #00405a;
-  margin: 0 15%;
-  margin-top: 25px;
+  margin: 1.5rem 15% 0 15%;
   border-radius: 20px;
   padding: 30px 20px;
 }
@@ -27,13 +26,12 @@ h3 {
   color: #eaf6ff;
   text-align: center;
   padding-bottom: 0.7rem;
+  margin: 0;
 }
 #login-page h1 {
-  margin: 0;
   font-size: 45px;
 }
 #login-page h3 {
-  margin-bottom: 0;
   font-size: 25px;
 }
 #login-form {
@@ -49,7 +47,7 @@ input {
   padding: 15px 20px;
   flex-grow: 1;
   border-radius: 2rem;
-  margin: 1.2rem 0 1rem 0;
+  margin: 1.2rem 0 2rem 0;
   min-width: 45%;
   width: auto;
   text-align: center;
@@ -62,7 +60,7 @@ input {
 #room-buttons {
   text-align: center;
   padding: 10px;
-  margin-top: 0.7rem;
+  margin-top: 1rem;
 }
 #room-buttons .room-button {
   display: inline-block;
@@ -75,7 +73,7 @@ input {
   font-size: 1.4rem;
   font-weight: bold;
   padding: 30px;
-  margin: 0.5rem;
+  margin: 0 0.5rem;
   width: 20%;
 }
 #room-buttons .room-button:hover {
@@ -103,7 +101,7 @@ input {
   font-style: italic;
   font-size: 1.8rem;
   padding: 20px 50px;
-  margin-top: 3.5rem;
+  margin: 3.5rem 0 0 0;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.35);
 }
 #login-button:hover {
@@ -114,23 +112,28 @@ input {
 }
 
 #chat-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   background-color: #00405a;
   border-bottom: 4px solid #0073a0;
-}
-#chat-tittle,
-#user-nick {
-  flex-grow: 1;
-  margin: 0;
   color: #ebebeb;
 }
-#chat-tittle {
+.header-cell {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+}
+#chat-title {
+  flex-grow: 1;
   font-size: 1.8rem;
   text-align: center;
-  padding-left: 30%;
+  margin: 0;
 }
 #user-nick {
   font-size: 1.2rem;
@@ -145,6 +148,7 @@ input {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  padding-top: 60px;
 }
 .msg-info {
   text-align: center;
